@@ -1,0 +1,12 @@
+{% load static %}
+<form method="GET" action="{% url 'comments_order_by' post_id=post.id %}" >
+    {% csrf_token %}
+    <div class="form-group">
+        <select class="form-control" name="ordered_byy">
+            <option disabled selected> -- Select To Order -- </option>
+            <option name="by_date" value="by_date">Order_Creation</option>
+            <option name="by_date" value="by_more">The most likes</option>
+        </select>
+        <input type="submit" class="btn btn-primary"  value="Click">
+    </div>
+</form>

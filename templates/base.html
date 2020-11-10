@@ -1,0 +1,90 @@
+{% load static %}
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta charset="UTF-8">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+	<link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+
+	<!-- Stylesheets -->
+	<link href="{% static 'css/styles.css' %}" rel="stylesheet">
+	<title>{% block head_title %}Bona{% endblock %}</title>
+
+</head>
+<body >
+	<header class="navbar">
+		<div class="container-fluid position-relative no-side-padding">
+			<a href="#" class="logo"><img src="{% static 'images/logo.png' %}" alt="Logo Image"></a>
+			<div class="menu-nav-icon" data-nav-menu="#main-menu"><i class="ion-navicon"></i></div>
+			<ul class="main-menu visible-on-click" id="main-menu">
+				<li><a href="{% url 'index'%}"><i class="fa fa-home"></i> Home</a></li>
+				{% if user.is_authenticated %}
+				<li><a href="{% url 'account_settings' pk=request.user.id %}"><i class="fa fa-cogs"></i> Settings</a></li>
+				<li><a href="{% url 'post_add' %}"><i class="fa fa-plus"></i> Create post</a></li>
+				{% endif %}
+			</ul><!-- main-menu -->
+			
+			<ul class="main-menu left-menu">
+			{% if user.is_authenticated %}
+				<li><i class="fa fa-handshake-o"> Hello, {{ user.username }}</i></a></li>
+				<li><a href="{% url 'logout' %}"><i class="fa fa-sign-out"> Logout</i></a></li>
+			{% else %}
+				<li><a href="{% url 'signup' %}"><i class="fa fa-user-plus"> Sign Up</i></a></li>
+				<li><a href="{% url 'login' %}"><i class="fa fa-sign-in"> Login</i></a></li>
+			{% endif %}
+			
+			</ul>
+		</div><!-- conatiner -->	
+	</header>
+
+	<div class="slider display-table center-text" style="background-image: url('{% static "images/category-1.jpg" %}');">
+		<h1 class="title display-table-cell"><b>BEAUTY</b></h1>
+	</div><!-- slider -->
+
+	<main></main>
+	{% block content %}{% endblock %}
+	<footer>
+
+		<div class="container">
+			<div class="row">
+
+				<div class="col-lg-4 col-md-6">
+					<div class="footer-section">
+
+						<a class="logo" href="#"><img src="{% static 'images/logo.png' %}" alt="Logo Image"></a>
+						<p class="copyright">Bona @ 2017. All rights reserved.</p>
+						<p class="copyright">Designed by <a href="https://colorlib.com" target="_blank">Colorlib</a></p>
+						<ul class="icons">
+							<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="#"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+						</ul>
+
+					</div><!-- footer-section -->
+				</div><!-- col-lg-4 col-md-6 -->
+
+
+				<div class="col-lg-4 col-md-6">
+					<div class="footer-section">
+
+						<h4 class="title"><b>SUBSCRIBE</b></h4>
+						<div class="input-area">
+							<form>
+								<input class="email-input" type="text" placeholder="Enter your email">
+								<button class="submit-btn" type="submit"><i class="icon ion-ios-email-outline"></i></button>
+							</form>
+						</div>
+
+					</div><!-- footer-section -->
+				</div><!-- col-lg-4 col-md-6 -->
+
+			</div><!-- row -->
+		</div><!-- container -->
+	</footer>
+</body>
+</html>

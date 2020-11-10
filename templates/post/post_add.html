@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block head_title %}Add Post{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+<div class="row">
+    <br/>
+	<div class="mx-auto col-md-6">
+    <br>
+    <h2 class="text-center">Add Post</h2>
+        <form action="" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{form.as_p}}
+            <button type="submit" class="btn btn-info">Post</button>
+        </form>  
+    </div>     
+</div>
+<br>
+{% else %}
+<p>You are not allowed to do this</p>
+{% endif %}
+{% endblock %}

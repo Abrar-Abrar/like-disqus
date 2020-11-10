@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title %}Login{% endblock %}
+
+{% block content %}
+<!-- Sing in  Form -->
+<div class="mySignup">
+<section class="sign-in">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <figure><img src="{% static 'images/signin-image.jpg' %}" alt="sing up image"></figure>
+                Don't have an account? <a href="{% url 'signup' %}" class="signup-image-link"><i class="fa fa-hand-o-right"></i> Create an account</a>
+                <br> Forgot password? <a href="{% url 'password_reset' %}" class="signup-image-link"><i class="fa fa-hand-o-right"></i> Reset password</a>
+            </div>
+            <div class="signin-form">
+                <h2 class="form-title">Login</h2>
+                <form method="POST" class="register-form" id="login-form">
+                    {% csrf_token %}
+                    {% for field in form %}
+                    <div class="form-group">
+                        <label for={{ field.id_for_label }}><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <i class="zmdi zmdi-account material-icons-name"></i>{{ field }}
+                    </div>
+                    {% endfor %}
+                    <div class="form-group form-button">
+                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+</div>
+{% endblock %}

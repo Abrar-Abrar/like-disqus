@@ -1,0 +1,89 @@
+{% load static %}
+{% if not comments %}
+<h4><b>No Comments Yet...</b></h4>
+<br/>
+{% else %}
+{% include "../comment/order_by.html" %}
+<br>
+<h4><b>COMMENTS({{ comment_count }})</b></h4>
+{% for comment in comments %}
+<div class="commnets-area">
+    <div class="comment">
+        <div class="post-info">
+            <div class="left-area">
+                {% if comment.author.is_superuser %}
+                <img class="avatar" src="{% static 'images/adminProfile.jpg'%}" alt="Default admin Picture">
+                {% else %}
+                    {% if comment.author.member.picture %}
+                    <img class="avatar" src="{{ comment.author.member.picture.url }}" alt="Profile Picture">
+                    {% else %}
+                    <img class="avatar" src="{% static 'images/defaultProfile.png'%}" alt="Default Profile Picture">
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="middle-area">
+                {% if comment.author.is_superuser %}
+                <i class="fa fa-star"></i>
+                {% endif %}
+                <a class="name" href="#"><b>{{ comment.author }}</b></a>
+                <h6 class="date">{{ comment.created_at }}</h6>
+            </div>
+            {% if user.is_authenticated and user.id == comment.author.id %}
+            <div class="text-right">
+            <a href="{% url 'comment_edit' comment_id=comment.id %}" class="btn btn-outline-dark"><i class="fa fa-edit"> Modify</i></a>
+            <a href="{% url 'comment_delete' comment_id=comment.id %}" class="btn btn-outline-danger"><i class="fa fa-close"> Delete </i></a>
+            </div>
+            {% endif %}
+        </div><!-- post-info -->
+        <p>{{ comment.content }}</p>
+    </div>
+    {% if comment.image %}
+    <div class="card">
+        <img class="card-img-top" style="height:200px;" src="{{ comment.image.url }}" alt="Image Comment">
+    </div>
+    {% endif %}
+    {% if user.is_authenticated %}
+    <br>
+    <form action="{% url 'comment_reaction' %}" method="POST">
+        {% csrf_token %}
+        {% if request.user in comment.likes.all %}
+        <button id="like" type="submit" name="comment_id" value="{{ comment.id }}" class="btn btn-danger btn-sm">
+        <i class="fa fa-thumbs-down"></i></button>
+        {% else %}
+        <button type="submit" name="comment_id" value="{{ comment.id }}" class="btn btn-primary btn-sm">
+        <i class="fa fa-thumbs-up"></i></button>
+        {% endif %}
+    </form>
+    {% endif %}
+    <br>
+    <p style="display: inline;"><i class="fa fa-thumbs-up"></i>({{comment.likes.count}}) | 
+       <i class="fa fa-thumbs-down"></i>
+        ({{comment.dislikes.count}})
+    </p>
+</div><!-- commnets-area -->
+{% endfor %}
+<!--Paginator-->
+<div class="row">
+    <div class="col-md-12 animate-box">
+    {% if comments.has_other_pages %}
+        <ul class="pagination">
+        {% if comments.has_previous %}
+            <li class="page-item"><a href="?page={{ comments.previous_page_number }}"class="page-link">&laquo</a></li>
+            <li class="page-item"><a href="?page=1"class="page-link">First</a></li>   
+        {% endif %}
+        {% for i in comments.paginator.page_range %}
+            {% if comments.number == i %}
+            <li class="page-item"><a class="active page-link">{{ i }}</a></li>
+            {% else %}
+            <li class="page-item"><a href="?page={{ i }}"class="page-link">{{ i }}</a></li>
+            {% endif %}
+        {% endfor %}
+        {% if comments.has_next %}
+            <li class="page-item"><a href="?page={{ comments.paginator.num_pages }}"class="page-link">Last</a></li>
+            <li class="page-item"><a href="?page={{ comments.next_page_number }}"class="page-link">&raquo</a></li> 
+        {% endif %}
+    {% endif %}
+    </div>
+</div>
+<!--End Paginator-->
+{% endif %}

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title %}{{  post.content | truncatechars:10 }}{% endblock %}
+{% block content %}
+	<section class="post-area section">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-8 col-md-12 no-right-padding">
+					<div class="main-post">
+						<div class="blog-post-inner">
+							<div class="post-info">
+								<div class="left-area">
+								{% if post.author.is_superuser %}
+									<img class="avatar" src="{% static 'images/adminProfile.jpg'%}" alt="Default admin Picture">
+								{% else %}
+									{% if post.author.member.picture %}
+									<img class="avatar" src="{{ post.author.member.picture.url }}" alt="Profile Picture">
+									{% else %}
+									<img class="avatar" src="{% static 'images/defaultProfile.png'%}" alt="Default Profile Picture">
+									{% endif %}
+								{% endif %}
+								</div>
+								<div class="middle-area">
+								    {% if post.author.is_superuser %}
+									<i class="fa fa-star"></i>
+									{% endif %}
+									<b class="name">{{ post.author }}</b>
+									<h6 class="date">on {{ post.created_at }}</h6>
+								</div>
+							</div><!-- post-info -->
+							<h3 class="title"><a href="#"><b>{{ post.title }}</b></a></h3>
+							<p class="para">{{ post.content }}</p>
+							{% if post.image %}
+							<div class="post-image"><img src="{{ post.image.url }}" alt="Blog Image"></div>
+							{% endif %}
+						</div><!-- blog-post-inner -->
+
+						<div class="post-icons-area">
+							<ul class="post-icons">
+                                <li><a href="#"><i class="fa fa-thumbs-up"></i>{{post.likes.count}}</a></li>
+                                <li><a href="#"><i class="fa fa-comment"></i>{{post.comments.count}}</a></li>
+                            </ul>
+							{% if user.is_authenticated %}
+							<form id="post_like" action="{% url 'post_reaction' %}" method="POST">
+							{% csrf_token %}
+								{% if post_liked %}
+								<button id="like" type="submit" name="post_id" value="{{ post.id }}" class="btn btn-primary btn-sm">
+								<i class="fa fa-thumbs-up"></i> Like </button>
+								{% else %}
+								<button type="submit" name="post_id" value="{{ post.id }}" class="btn btn-danger btn-sm">
+								<i class="fa fa-thumbs-down"></i> Dislike</button>
+								{% endif %}
+							</form>
+							{% endif %}
+						</div>
+					</div><!-- main-post -->
+				</div><!-- col-lg-8 col-md-12 -->
+			</div><!-- row -->
+		</div><!-- container -->
+	</section><!-- post-area -->
+	<section class="comment-section">
+		<div class="container">
+			<br><br>
+			<h4><b>POST COMMENT</b></h4>
+			<a class="btn btn-info" href="{% url 'comment_add' post_id=post.id %}"><i class="fa fa-hand-o-right"></i> Add comment</a>
+			<div class="row">
+				<div class="col-lg-8 col-md-12">
+				<br><br>
+				{% include "../comment/comments.html" %}
+				</div><!-- col-lg-8 col-md-12 -->
+			</div><!-- row -->
+		</div><!-- container -->
+	</section>
+{% endblock %}

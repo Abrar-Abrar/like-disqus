@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block head_title %}Delete Post{% endblock %}
+
+{% block content %}
+<br>
+{% if user.is_authenticated and user.id == post.author.id %}
+<div class="row text-center">
+    <br/>
+	<div class="mx-auto col-md-6">
+        <p>Are you sure to delete this post?... </p>
+        <br/>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <a class="btn btn-outline-info" href="{% url 'index' %}">Cancel</a>
+            <input class="btn btn-outline-danger" type="submit" name="Confirm" value="Delete">
+        </form>
+        <br/>
+    </div>
+</div>
+{% else %}
+<p>You are not allowed to do this</p>
+{% endif %}
+{% endblock %}

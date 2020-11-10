@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load static %}
+{% block head_title %}Account Settings{% endblock %}
+{% block content %}
+
+<br>
+<div class="row">
+	<div class="col-md-3">
+		<div class="card card-body">
+			<a class="btn btn-dark" href="{% url 'index' %}"> &#8592; Back to Home</a>
+			<hr>
+			<h3 style="text-align: center">Account Settings</h3>
+			<hr>
+			{% if user.id == user.is_superuser %}
+                <img class="avatar" src="{% static 'images/adminProfile.jpg'%}" alt="Default admin Picture">
+            {% else %}
+				{% if request.user.member.picture %}
+					<img class="profile-pic" src="{{ request.user.member.picture.url }}" >
+				{% else %}
+					<img src="{% static 'images/defaultProfile.png' %}" class="img-responsive" alt="Your default profile">
+				{% endif %} 
+			{% endif %}
+			<br><a href="{% url 'password_reset' %}" class="btn btn-warning">Reset password</a>
+		</div>
+	</div>
+	<div class="col-md-9">
+		<div class="card card-body">
+			<form method="POST" action="" enctype="multipart/form-data">
+				{% csrf_token %}
+				{{form.as_p}}
+			<input class="btn btn-primary" type="submit" value="Save Changes">
+			</form>
+		</div>
+	</div>
+</div>
+{% endblock %}
